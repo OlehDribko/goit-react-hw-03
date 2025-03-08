@@ -2,8 +2,7 @@ import { useState } from "react";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ContactList from "./components/ContactList/ContactList";
 import "./App.css";
-
-
+import SearchBox from "./components/SearchBox/SearchBox";
 
 const initContacts = [
   { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
@@ -17,13 +16,22 @@ function App() {
   const addContact = (newContact) => {
     setContacts((prevContacts) => [...prevContacts, newContact]);
   };
+  const [searchName, setSearchName] = useState("");
+  const filteredContacts = contacts.filter((contact) =>
+    contact.name.toLocaleLowerCase().includes(searchName.toLocaleLowerCase())
+  );
+
+  const deleteContact = (contactId) =>
+    setContacts((prevContacts) =>
+      prevContacts.filter((contact) => contact.id !== contactId)
+    );
 
   return (
     <>
       <h1>Phonebook</h1>
       <ContactForm addContact={addContact} />
-      {/* <SearchBox  /> */}
-  <ContactList contacts={contacts} />
+      <SearchBox searchName={searchName} setSearchName={setSearchName} />
+      <ContactList contacts={filteredContacts} deleteContact={deleteContact} />
     </>
   );
 }
